@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Litecoin Live Graph Test</title>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  </head>
+  <style media="screen">
+    .svg-container {
+      width: 30%;
+      display: inline-block;
+    }
+    .svg-container svg {
+      border: 1px solid #000;
+      width: 100%;
+      height: auto;
+    }
+    .price-hist-path {
+      stroke-width: 1px;
+      fill: none;
+    }
+    .ltc-price {
+      display: inline-block;
+      font-size: 40px;
+    }
+  </style>
+  <body>
+    <h1>LTC Live Graph</h1>
+
+    <h2>Last Hour</h2>
+    <div class="svg-container">
+      <svg class="ltc-minute-svg" width="304" height="104" viewBox="0 0 304 104">
+      </svg>
+    </div>
+    <div class="ltc-price">
+    </div>
+
+    <h2>Last Day</h2>
+    <div class="svg-container">
+      <svg class="ltc-day-svg" width="304" height="104" viewBox="0 0 304 104">
+      </svg>
+    </div>
+    <div class="ltc-price">
+    </div>
+
+    <h2>Last Week</h2>
+    <div class="svg-container">
+      <svg class="ltc-week-svg" width="304" height="104" viewBox="0 0 304 104">
+      </svg>
+    </div>
+    <div class="ltc-price">
+    </div>
+
+    <h2>Last Month</h2>
+    <div class="svg-container">
+      <svg class="ltc-month-svg" width="304" height="104" viewBox="0 0 304 104">
+      </svg>
+    </div>
+    <div class="ltc-price">
+    </div>
+
+    <h2>Last Quarter</h2>
+    <div class="svg-container">
+      <svg class="ltc-quarter-svg" width="304" height="104" viewBox="0 0 304 104">
+      </svg>
+    </div>
+    <div class="ltc-price">
+    </div>
+
+  </body>
+  <script type="text/javascript" src="main.js"></script>
+</html>
