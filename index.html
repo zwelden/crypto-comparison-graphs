@@ -6,8 +6,17 @@
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   </head>
   <style media="screen">
+    .coin-data-wrapper {
+      box-sizing: border-box;
+      padding: 5px;
+      width: 33%;
+      float: left;
+    }
+    h1, h2, h3, .current-price {
+      text-align: center;
+    }
     .svg-container {
-      width: 30%;
+      width: 100%;
       display: inline-block;
     }
     .svg-container svg {
@@ -19,52 +28,129 @@
       stroke-width: 1px;
       fill: none;
     }
-    .ltc-price {
+    .latest-price {
       display: inline-block;
       font-size: 40px;
     }
   </style>
   <body>
-    <h1>LTC Live Graph</h1>
+    <h1>Crypto Live Graph</h1>
 
-    <h2>Last Hour</h2>
-    <div class="svg-container">
-      <svg class="ltc-minute-svg" width="304" height="104" viewBox="0 0 304 104">
-      </svg>
-    </div>
-    <div class="ltc-price">
+    <div class="coin-data-wrapper">
+
+      <h2>LTC</h2>
+      <div class="current-price">
+        Latest Price:<br><span class="latest-price LTC-price"></span>
+      </div>
+
+      <h3>Last Hour</h3>
+      <div class="svg-container">
+        <svg class="LTC-minute-svg" width="304" height="104" viewBox="0 0 304 104">
+        </svg>
+      </div>
+
+      <h3>Last Day</h3>
+      <div class="svg-container">
+        <svg class="LTC-day-svg" width="304" height="104" viewBox="0 0 304 104">
+        </svg>
+      </div>
+
+      <h3>Last Week</h3>
+      <div class="svg-container">
+        <svg class="LTC-week-svg" width="304" height="104" viewBox="0 0 304 104">
+        </svg>
+      </div>
+
+      <h3>Last Month</h3>
+      <div class="svg-container">
+        <svg class="LTC-month-svg" width="304" height="104" viewBox="0 0 304 104">
+        </svg>
+      </div>
+
+      <h3>Last Quarter</h3>
+      <div class="svg-container">
+        <svg class="LTC-quarter-svg" width="304" height="104" viewBox="0 0 304 104">
+        </svg>
+      </div>
+
     </div>
 
-    <h2>Last Day</h2>
-    <div class="svg-container">
-      <svg class="ltc-day-svg" width="304" height="104" viewBox="0 0 304 104">
-      </svg>
-    </div>
-    <div class="ltc-price">
+    <div class="coin-data-wrapper">
+
+      <h2>BTC</h2>
+      <div class="current-price">
+        Latest Price:<br><span class="latest-price BTC-price"></span>
+      </div>
+
+      <h3>Last Hour</h3>
+      <div class="svg-container">
+        <svg class="BTC-minute-svg" width="304" height="104" viewBox="0 0 304 104">
+        </svg>
+      </div>
+
+      <h3>Last Day</h3>
+      <div class="svg-container">
+        <svg class="BTC-day-svg" width="304" height="104" viewBox="0 0 304 104">
+        </svg>
+      </div>
+
+      <h3>Last Week</h3>
+      <div class="svg-container">
+        <svg class="BTC-week-svg" width="304" height="104" viewBox="0 0 304 104">
+        </svg>
+      </div>
+
+      <h3>Last Month</h3>
+      <div class="svg-container">
+        <svg class="BTC-month-svg" width="304" height="104" viewBox="0 0 304 104">
+        </svg>
+      </div>
+
+      <h3>Last Quarter</h3>
+      <div class="svg-container">
+        <svg class="BTC-quarter-svg" width="304" height="104" viewBox="0 0 304 104">
+        </svg>
+      </div>
+
     </div>
 
-    <h2>Last Week</h2>
-    <div class="svg-container">
-      <svg class="ltc-week-svg" width="304" height="104" viewBox="0 0 304 104">
-      </svg>
-    </div>
-    <div class="ltc-price">
-    </div>
+    <div class="coin-data-wrapper">
 
-    <h2>Last Month</h2>
-    <div class="svg-container">
-      <svg class="ltc-month-svg" width="304" height="104" viewBox="0 0 304 104">
-      </svg>
-    </div>
-    <div class="ltc-price">
-    </div>
+      <h2>NEO</h2>
+      <div class="current-price">
+        Latest Price:<br><span class="latest-price NEO-price"></span>
+      </div>
 
-    <h2>Last Quarter</h2>
-    <div class="svg-container">
-      <svg class="ltc-quarter-svg" width="304" height="104" viewBox="0 0 304 104">
-      </svg>
-    </div>
-    <div class="ltc-price">
+      <h3>Last Hour</h3>
+      <div class="svg-container">
+        <svg class="NEO-minute-svg" width="304" height="104" viewBox="0 0 304 104">
+        </svg>
+      </div>
+
+      <h3>Last Day</h3>
+      <div class="svg-container">
+        <svg class="NEO-day-svg" width="304" height="104" viewBox="0 0 304 104">
+        </svg>
+      </div>
+
+      <h3>Last Week</h3>
+      <div class="svg-container">
+        <svg class="NEO-week-svg" width="304" height="104" viewBox="0 0 304 104">
+        </svg>
+      </div>
+
+      <h3>Last Month</h3>
+      <div class="svg-container">
+        <svg class="NEO-month-svg" width="304" height="104" viewBox="0 0 304 104">
+        </svg>
+      </div>
+
+      <h3>Last Quarter</h3>
+      <div class="svg-container">
+        <svg class="NEO-quarter-svg" width="304" height="104" viewBox="0 0 304 104">
+        </svg>
+      </div>
+
     </div>
 
   </body>
