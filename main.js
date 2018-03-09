@@ -78,7 +78,7 @@
       drawGraph(coinSymbol, coinObj.monthSvg, dailyDatasetMonth, 30, false);
       drawGraph(coinSymbol, coinObj.quarterSvg, coinObj.dailyDatasetQuarter, 90, false);
     });
-  }
+  };
 
   var drawGraph = function (coinSymbol, svg, dataset, maxPeriods, isUpdating) {
     var coinObj = compareListObj[coinSymbol];
@@ -143,61 +143,29 @@
     });
   };
 
-
-  compareList.push('LTC');
-  compareListObj['LTC'] = {
-    firstRun: true,
-    lastColor: 'green',
-    oldestPrice: 0,
-    updateTimer: 0,
-    minuteDataset: [],
-    hourlyDatasetWeek: [],
-    dailyDatasetQuarter: [],
-    minuteSvg: document.querySelector('.LTC-minute-svg'),
-    daySvg: document.querySelector('.LTC-day-svg'),
-    weekSvg: document.querySelector('.LTC-week-svg'),
-    monthSvg: document.querySelector('.LTC-month-svg'),
-    quarterSvg: document.querySelector('.LTC-quarter-svg'),
-    priceHolder: document.querySelector('.LTC-price'),
-    getNewPrice: function () { updatePrice('LTC'); }
+  var createCoin = function (symbol) {
+    compareList.push(symbol);
+    compareListObj[symbol] = {
+      firstRun: true,
+      lastColor: 'green',
+      oldestPrice: 0,
+      updateTimer: 0,
+      minuteDataset: [],
+      hourlyDatasetWeek: [],
+      dailyDatasetQuarter: [],
+      minuteSvg: document.querySelector('.' + symbol + '-minute-svg'),
+      daySvg: document.querySelector('.' + symbol + '-day-svg'),
+      weekSvg: document.querySelector('.' + symbol + '-week-svg'),
+      monthSvg: document.querySelector('.' + symbol + '-month-svg'),
+      quarterSvg: document.querySelector('.' + symbol + '-quarter-svg'),
+      priceHolder: document.querySelector('.' + symbol + '-price'),
+      getNewPrice: function () { updatePrice(symbol); }
+    };
   };
 
-
-  compareList.push('BTC');
-  compareListObj['BTC'] = {
-    firstRun: true,
-    lastColor: 'green',
-    oldestPrice: 0,
-    updateTimer: 0,
-    minuteDataset: [],
-    hourlyDatasetWeek: [],
-    dailyDatasetQuarter: [],
-    minuteSvg: document.querySelector('.BTC-minute-svg'),
-    daySvg: document.querySelector('.BTC-day-svg'),
-    weekSvg: document.querySelector('.BTC-week-svg'),
-    monthSvg: document.querySelector('.BTC-month-svg'),
-    quarterSvg: document.querySelector('.BTC-quarter-svg'),
-    priceHolder: document.querySelector('.BTC-price'),
-    getNewPrice: function () { updatePrice('BTC'); }
-  };
-
-  compareList.push('NEO');
-  compareListObj['NEO'] = {
-    firstRun: true,
-    lastColor: 'green',
-    oldestPrice: 0,
-    updateTimer: 0,
-    minuteDataset: [],
-    hourlyDatasetWeek: [],
-    dailyDatasetQuarter: [],
-    minuteSvg: document.querySelector('.NEO-minute-svg'),
-    daySvg: document.querySelector('.NEO-day-svg'),
-    weekSvg: document.querySelector('.NEO-week-svg'),
-    monthSvg: document.querySelector('.NEO-month-svg'),
-    quarterSvg: document.querySelector('.NEO-quarter-svg'),
-    priceHolder: document.querySelector('.NEO-price'),
-    getNewPrice: function () { updatePrice('BTC'); }
-  };
+  createCoin('LTC');
+  createCoin('BTC');
+  createCoin('NEO');
 
   initGraphs('LTC');
   updatePrice('LTC');

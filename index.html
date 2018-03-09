@@ -8,7 +8,8 @@
   <style media="screen">
     .coin-data-wrapper {
       box-sizing: border-box;
-      padding: 5px;
+      padding-left: 10px;
+      padding-right: 10px;
       width: 33%;
       float: left;
     }
@@ -20,13 +21,17 @@
       display: inline-block;
     }
     .svg-container svg {
-      border: 1px solid #000;
+      border: 1px solid #ccc;
+      box-shadow: 0 3px 5px #ccc;
       width: 100%;
       height: auto;
     }
     .price-hist-path {
       stroke-width: 1px;
       fill: none;
+    }
+    .svg-container:hover .price-hist-path {
+      stroke-width: 2px;
     }
     .latest-price {
       display: inline-block;
