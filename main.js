@@ -3,6 +3,7 @@
  * TODO:
  * - make circle element move inside svg with price current price value
  * - refactor compareList and compareListObj instatinatons
+ * - make current price updates on single api call ?
  */
 (function () {
   var updateFrequency = 15000; // milliseconds
