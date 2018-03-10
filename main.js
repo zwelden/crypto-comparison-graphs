@@ -11,8 +11,6 @@
   var compareList = [];
   var compareListObj = [];
 
-  var circleOpen = '<circle cx="302" cy="52" r="2" fill="red" />';
-
   var api = {
     minuteHistorical: {
       begining: 'https://min-api.cryptocompare.com/data/histominute?fsym=',
@@ -49,13 +47,12 @@
   };
 
   var getLatestPrice = function (api, coinSymbol, callback) {
-    var coinObj = compareListObj[coinSymbol];
     var apiPath = api.begining + coinSymbol + api.ending;
     axios.get(apiPath)
       .then(function (response) {
         var price = response.data[coinSymbol].USD;
 
-        callback(price, coinObj);
+        callback(price, coinSymbol);
       })
       .catch(function (e) {
         console.log(e);
@@ -65,24 +62,33 @@
   var initGraphs = function (coinSymbol) {
     var coinObj = compareListObj[coinSymbol];
     loadData(api.minuteHistorical, coinSymbol, coinObj.minuteDataset, function () {
-      drawGraph(coinSymbol, coinObj.minuteSvg, coinObj.minuteDataset, 60, true);
+      drawGraph(coinSymbol, coinObj.minuteSvg, coinObj.minuteDataset, 60);
     });
 
     loadData(api.hourHistorical, coinSymbol, coinObj.hourlyDatasetWeek, function () {
-      var hourlyDatasetDay = coinObj.hourlyDatasetWeek.slice(144);
-      drawGraph(coinSymbol, coinObj.daySvg, hourlyDatasetDay, 24, false);
-      drawGraph(coinSymbol, coinObj.weekSvg, coinObj.hourlyDatasetWeek, 168, false);
+      coinObj.hourlyDatasetDay = coinObj.hourlyDatasetWeek.slice(144);
+      coinObj.dayOpenPrice = coinObj.hourlyDatasetDay[0];
+      drawGraph(coinSymbol, coinObj.daySvg, coinObj.hourlyDatasetDay, 24, false);
+      drawGraph(coinSymbol, coinObj.weekSvg, coinObj.hourlyDatasetWeek, 168);
     });
 
     loadData(api.dayHistorical, coinSymbol, coinObj.dailyDatasetQuarter, function () {
-      var dailyDatasetMonth = coinObj.dailyDatasetQuarter.slice(60);
-      drawGraph(coinSymbol, coinObj.monthSvg, dailyDatasetMonth, 30, false);
-      drawGraph(coinSymbol, coinObj.quarterSvg, coinObj.dailyDatasetQuarter, 90, false);
+      coinObj.dailyDatasetMonth = coinObj.dailyDatasetQuarter.slice(60);
+      drawGraph(coinSymbol, coinObj.monthSvg, coinObj.dailyDatasetMonth, 30, false);
+      drawGraph(coinSymbol, coinObj.quarterSvg, coinObj.dailyDatasetQuarter, 90);
     });
   };
 
-  var drawGraph = function (coinSymbol, svg, dataset, maxPeriods, isUpdating) {
-    var coinObj = compareListObj[coinSymbol];
+  var setStyleColor = function (pastPrice, currentPrice) {
+    if (currentPrice >= pastPrice) {
+      return 'green';
+    } else {
+      return 'red';
+    }
+  };
+
+  var drawGraph = function (coinSymbol, svg, dataset, maxPeriods) {
+    var graphContainer = svg.querySelector('.graph');
     var pathOpen = '<path ';
     var pathCode = 'd="M';
     var pathClose = '" class="price-hist-path"></path>';
@@ -90,23 +96,12 @@
     var periodCounter = 0;
     var periods = dataset.length >= maxPeriods + 1 ? maxPeriods + 1 : dataset.length;
     var tempDataset = dataset.slice(0, periods);
+
     var tempMax = Math.max(...tempDataset);
     var tempMin = Math.min(...tempDataset);
     var tempSpread = tempMax - tempMin;
 
-    if (isUpdating) {
-      coinObj.oldestPrice = dataset[0];
-    }
-
-    if (tempDataset[tempDataset.length - 1] > tempDataset[0]) {
-      style += 'green;" ';
-      coinObj.lastColor = 'green';
-    } else if (tempDataset[tempDataset.length - 1] < tempDataset[0]) {
-      style += 'red;" ';
-      coinObj.lastColor = 'red';
-    } else {
-      style += coinObj.lastColor + ';"';
-    }
+    style += setStyleColor(dataset[0], dataset[maxPeriods]) + ';" ';
 
     for (var i = 0; i < periods; i++) {
       var dataPoint = tempDataset[i];
@@ -114,33 +109,66 @@
       var xDist = 2 + (periodCounter * 300 / maxPeriods); // = 300 / periods or svgwidth / periods
       var line = ' ' + xDist + ' ' + plotPoint;
       pathCode += line;
-      svg.innerHTML = pathOpen + style + pathCode + pathClose + circleOpen;
+      graphContainer.innerHTML = pathOpen + style + pathCode + pathClose;
       periodCounter += 1;
     }
   };
 
+  var drawCurrentPriceSvgElement = function (svg, dataset, currentPrice) {
+    var latestPriceContainer = svg.querySelector('.current-price');
+    var svgLatestPriceObj;
+
+    var upTriangle = '<polygon points="301,0 298,5 304,5" style="fill:green;" />';
+    var downTriangle = '<polygon points="301,104 298,99 304,99" style="fill:red;" />';
+    var circleOpen = '<circle cx="302" ';
+    var circleY = 'cy="';
+    var circleRadius = '" r="2" ';
+    var circleFill = 'fill="';
+    var circleClose = '" />';
+    var dataStartPrice = dataset[0];
+    var fillColor = setStyleColor(dataStartPrice, currentPrice);
+
+    var dataMax = Math.max(...dataset);
+    var dataMin = Math.min(...dataset);
+    var dataSpread = dataMax - dataMin;
+
+    if (currentPrice > dataMax) {
+      svgLatestPriceObj = upTriangle;
+    } else if (currentPrice < dataMin) {
+      svgLatestPriceObj = downTriangle;
+    } else {
+      var yPos = 102 - ((currentPrice - dataMin) / dataSpread * 100);
+      svgLatestPriceObj = circleOpen + circleY + yPos + circleRadius + circleFill + fillColor + circleClose;
+    }
+
+    latestPriceContainer.innerHTML = svgLatestPriceObj;
+  };
+
   var updatePrice = function (coinSymbol) {
-    getLatestPrice(api.current, coinSymbol, function (price, coinObj) {
+    getLatestPrice(api.current, coinSymbol, function (price, coinSymbol) {
+      var coinObj = compareListObj[coinSymbol];
       coinObj.priceHolder.innerText = price;
 
-      if (price > coinObj.oldestPrice) {
-        coinObj.priceHolder.style.color = 'green';
-      } else if (price < coinObj.oldestPrice) {
-        coinObj.priceHolder.style.color = 'red';
-      } else {
-        coinObj.priceHolder.style.color = coinObj.lastColor;
-      }
+      coinObj.priceHolder.style.color = setStyleColor(coinObj.dayOpenPrice, price);
+
       if (coinObj.firstRun) {
         coinObj.firstRun = false;
         return;
       }
+
       coinObj.updateTimer++;
       if (coinObj.updateTimer === 60 / (updateFrequency / 1000)) { // one minute divided by update frequency in seconds
         coinObj.minuteDataset.shift();
         coinObj.minuteDataset.push(price);
-        drawGraph(coinSymbol, coinObj.minuteSvg, coinObj.minuteDataset, 60, true);
+        drawGraph(coinSymbol, coinObj.minuteSvg, coinObj.minuteDataset, 60);
         coinObj.updateTimer = 0;
       }
+
+      drawCurrentPriceSvgElement(coinObj.minuteSvg, coinObj.minuteDataset, price);
+      drawCurrentPriceSvgElement(coinObj.daySvg, coinObj.hourlyDatasetDay, price);
+      drawCurrentPriceSvgElement(coinObj.weekSvg, coinObj.hourlyDatasetWeek, price);
+      drawCurrentPriceSvgElement(coinObj.monthSvg, coinObj.dailyDatasetMonth, price);
+      drawCurrentPriceSvgElement(coinObj.quarterSvg, coinObj.dailyDatasetQuarter, price);
     });
   };
 
@@ -149,10 +177,12 @@
     compareListObj[symbol] = {
       firstRun: true,
       lastColor: 'green',
-      oldestPrice: 0,
+      dayOpenPrice: 0,
       updateTimer: 0,
       minuteDataset: [],
+      hourlyDatasetDay: [],
       hourlyDatasetWeek: [],
+      dailyDatasetMonth: [],
       dailyDatasetQuarter: [],
       minuteSvg: document.querySelector('.' + symbol + '-minute-svg'),
       daySvg: document.querySelector('.' + symbol + '-day-svg'),

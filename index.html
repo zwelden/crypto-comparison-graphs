@@ -19,12 +19,16 @@
     .svg-container {
       width: 100%;
       display: inline-block;
+      box-sizing: border-box;
+      padding: 5px;
+      border-radius: 4px;
+      border: 1px solid #ddd;
+      box-shadow: 0 3px 5px #ddd;
     }
     .svg-container svg {
-      border: 1px solid #ccc;
-      box-shadow: 0 3px 5px #ccc;
       width: 100%;
       height: auto;
+      display: block;
     }
     .price-hist-path {
       stroke-width: 1px;
@@ -48,33 +52,43 @@
         Latest Price:<br><span class="latest-price LTC-price"></span>
       </div>
 
-      <h3>Last Hour</h3>
+      <h3>Past Hour</h3>
       <div class="svg-container">
         <svg class="LTC-minute-svg" width="304" height="104" viewBox="0 0 304 104">
+          <g class="graph"></g>
+          <g class="current-price"></g>
         </svg>
       </div>
 
-      <h3>Last Day</h3>
+      <h3>Past 24 Hours</h3>
       <div class="svg-container">
         <svg class="LTC-day-svg" width="304" height="104" viewBox="0 0 304 104">
+          <g class="graph"></g>
+          <g class="current-price"></g>
         </svg>
       </div>
 
-      <h3>Last Week</h3>
+      <h3>Past 7 Days</h3>
       <div class="svg-container">
         <svg class="LTC-week-svg" width="304" height="104" viewBox="0 0 304 104">
+          <g class="graph"></g>
+          <g class="current-price"></g>
         </svg>
       </div>
 
-      <h3>Last Month</h3>
+      <h3>Past 30 Days</h3>
       <div class="svg-container">
         <svg class="LTC-month-svg" width="304" height="104" viewBox="0 0 304 104">
+          <g class="graph"></g>
+          <g class="current-price"></g>
         </svg>
       </div>
 
-      <h3>Last Quarter</h3>
+      <h3>Past 90 Days</h3>
       <div class="svg-container">
         <svg class="LTC-quarter-svg" width="304" height="104" viewBox="0 0 304 104">
+          <g class="graph"></g>
+          <g class="current-price"></g>
         </svg>
       </div>
 
@@ -87,33 +101,43 @@
         Latest Price:<br><span class="latest-price BTC-price"></span>
       </div>
 
-      <h3>Last Hour</h3>
+      <h3>Past Hour</h3>
       <div class="svg-container">
         <svg class="BTC-minute-svg" width="304" height="104" viewBox="0 0 304 104">
+          <g class="graph"></g>
+          <g class="current-price"></g>
         </svg>
       </div>
 
-      <h3>Last Day</h3>
+      <h3>Past 24 Hours</h3>
       <div class="svg-container">
         <svg class="BTC-day-svg" width="304" height="104" viewBox="0 0 304 104">
+          <g class="graph"></g>
+          <g class="current-price"></g>
         </svg>
       </div>
 
-      <h3>Last Week</h3>
+      <h3>Past 7 Days</h3>
       <div class="svg-container">
         <svg class="BTC-week-svg" width="304" height="104" viewBox="0 0 304 104">
+          <g class="graph"></g>
+          <g class="current-price"></g>
         </svg>
       </div>
 
-      <h3>Last Month</h3>
+      <h3>Past 30 Days</h3>
       <div class="svg-container">
         <svg class="BTC-month-svg" width="304" height="104" viewBox="0 0 304 104">
+          <g class="graph"></g>
+          <g class="current-price"></g>
         </svg>
       </div>
 
-      <h3>Last Quarter</h3>
+      <h3>Past 90 Days</h3>
       <div class="svg-container">
         <svg class="BTC-quarter-svg" width="304" height="104" viewBox="0 0 304 104">
+          <g class="graph"></g>
+          <g class="current-price"></g>
         </svg>
       </div>
 
@@ -126,33 +150,43 @@
         Latest Price:<br><span class="latest-price NEO-price"></span>
       </div>
 
-      <h3>Last Hour</h3>
+      <h3>Past Hour</h3>
       <div class="svg-container">
         <svg class="NEO-minute-svg" width="304" height="104" viewBox="0 0 304 104">
+          <g class="graph"></g>
+          <g class="current-price"></g>
         </svg>
       </div>
 
-      <h3>Last Day</h3>
+      <h3>Past 24 Hours</h3>
       <div class="svg-container">
         <svg class="NEO-day-svg" width="304" height="104" viewBox="0 0 304 104">
+          <g class="graph"></g>
+          <g class="current-price"></g>
         </svg>
       </div>
 
-      <h3>Last Week</h3>
+      <h3>Past 7 Days</h3>
       <div class="svg-container">
         <svg class="NEO-week-svg" width="304" height="104" viewBox="0 0 304 104">
+          <g class="graph"></g>
+          <g class="current-price"></g>
         </svg>
       </div>
 
-      <h3>Last Month</h3>
+      <h3>Past 30 Days</h3>
       <div class="svg-container">
         <svg class="NEO-month-svg" width="304" height="104" viewBox="0 0 304 104">
+          <g class="graph"></g>
+          <g class="current-price"></g>
         </svg>
       </div>
 
-      <h3>Last Quarter</h3>
+      <h3>Past 90 Days</h3>
       <div class="svg-container">
         <svg class="NEO-quarter-svg" width="304" height="104" viewBox="0 0 304 104">
+          <g class="graph"></g>
+          <g class="current-price"></g>
         </svg>
       </div>
 
