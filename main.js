@@ -1,13 +1,13 @@
 /* global axios */
 /*
  * TODO:
- * - make circle element move inside svg with price current price value
  * - refactor compareList and compareListObj instatinatons
  * - make current price updates on single api call ?
  */
 (function () {
   var updateFrequency = 15000; // milliseconds
 
+  var timeframes = ['hour', 'day', 'week', 'month', 'quarter'];
   var compareList = [];
   var compareListObj = [];
 
@@ -61,22 +61,28 @@
 
   var initGraphs = function (coinSymbol) {
     var coinObj = compareListObj[coinSymbol];
-    loadData(api.minuteHistorical, coinSymbol, coinObj.minuteDataset, function () {
-      drawGraph(coinSymbol, coinObj.minuteSvg, coinObj.minuteDataset, 60);
+    loadData(api.minuteHistorical, coinSymbol, coinObj.graphs.hour.dataset, function () {
+      drawGraph(coinSymbol, coinObj.graphs.hour.svg, coinObj.graphs.hour.dataset, 60);
     });
 
-    loadData(api.hourHistorical, coinSymbol, coinObj.hourlyDatasetWeek, function () {
-      coinObj.hourlyDatasetDay = coinObj.hourlyDatasetWeek.slice(144);
-      coinObj.dayOpenPrice = coinObj.hourlyDatasetDay[0];
-      drawGraph(coinSymbol, coinObj.daySvg, coinObj.hourlyDatasetDay, 24, false);
-      drawGraph(coinSymbol, coinObj.weekSvg, coinObj.hourlyDatasetWeek, 168);
+    loadData(api.hourHistorical, coinSymbol, coinObj.graphs.week.dataset, function () {
+      coinObj.graphs.day.dataset = coinObj.graphs.week.dataset.slice(144);
+      coinObj.dayOpenPrice = coinObj.graphs.day.dataset[0];
+      drawGraph(coinSymbol, coinObj.graphs.day.svg, coinObj.graphs.day.dataset, 24, false);
+      drawGraph(coinSymbol, coinObj.graphs.week.svg, coinObj.graphs.week.dataset, 168);
     });
 
-    loadData(api.dayHistorical, coinSymbol, coinObj.dailyDatasetQuarter, function () {
-      coinObj.dailyDatasetMonth = coinObj.dailyDatasetQuarter.slice(60);
-      drawGraph(coinSymbol, coinObj.monthSvg, coinObj.dailyDatasetMonth, 30, false);
-      drawGraph(coinSymbol, coinObj.quarterSvg, coinObj.dailyDatasetQuarter, 90);
+    loadData(api.dayHistorical, coinSymbol, coinObj.graphs.quarter.dataset, function () {
+      coinObj.graphs.month.dataset = coinObj.graphs.quarter.dataset.slice(60);
+      drawGraph(coinSymbol, coinObj.graphs.month.svg, coinObj.graphs.month.dataset, 30, false);
+      drawGraph(coinSymbol, coinObj.graphs.quarter.svg, coinObj.graphs.quarter.dataset, 90);
     });
+  };
+
+  var initAllGraphs = function () {
+    for (var i = 0; i < compareList.length; i++) {
+      initGraphs(compareList[i]);
+    }
   };
 
   var setStyleColor = function (pastPrice, currentPrice) {
@@ -90,9 +96,10 @@
   var drawGraph = function (coinSymbol, svg, dataset, maxPeriods) {
     var graphContainer = svg.querySelector('.graph');
     var pathOpen = '<path ';
-    var pathCode = 'd="M';
+    var pathStroke = 'style="stroke:';
+    var pathStart = ';" d="M';
     var pathClose = '" class="price-hist-path"></path>';
-    var style = 'style="stroke:';
+
     var periodCounter = 0;
     var periods = dataset.length >= maxPeriods + 1 ? maxPeriods + 1 : dataset.length;
     var tempDataset = dataset.slice(0, periods);
@@ -101,7 +108,8 @@
     var tempMin = Math.min(...tempDataset);
     var tempSpread = tempMax - tempMin;
 
-    style += setStyleColor(dataset[0], dataset[maxPeriods]) + ';" ';
+    var pathStrokeColor = setStyleColor(dataset[0], dataset[maxPeriods]);
+    var pathCode = '';
 
     for (var i = 0; i < periods; i++) {
       var dataPoint = tempDataset[i];
@@ -109,9 +117,10 @@
       var xDist = 2 + (periodCounter * 300 / maxPeriods); // = 300 / periods or svgwidth / periods
       var line = ' ' + xDist + ' ' + plotPoint;
       pathCode += line;
-      graphContainer.innerHTML = pathOpen + style + pathCode + pathClose;
       periodCounter += 1;
     }
+
+    graphContainer.innerHTML = pathOpen + pathStroke + pathStrokeColor + pathStart + pathCode + pathClose;
   };
 
   var drawCurrentPriceSvgElement = function (svg, dataset, currentPrice) {
@@ -151,62 +160,75 @@
 
       coinObj.priceHolder.style.color = setStyleColor(coinObj.dayOpenPrice, price);
 
-      if (coinObj.firstRun) {
+      if (!coinObj.firstRun) {
+        coinObj.updateTimer++;
+        if (coinObj.updateTimer === 60 / (updateFrequency / 1000)) { // one minute divided by update frequency in seconds
+          coinObj.graphs.hour.dataset.shift();
+          coinObj.graphs.hour.dataset.push(price);
+          drawGraph(coinSymbol, coinObj.graphs.hour.svg, coinObj.graphs.hour.dataset, 60);
+          coinObj.updateTimer = 0;
+        }
+      } else {
         coinObj.firstRun = false;
-        return;
       }
 
-      coinObj.updateTimer++;
-      if (coinObj.updateTimer === 60 / (updateFrequency / 1000)) { // one minute divided by update frequency in seconds
-        coinObj.minuteDataset.shift();
-        coinObj.minuteDataset.push(price);
-        drawGraph(coinSymbol, coinObj.minuteSvg, coinObj.minuteDataset, 60);
-        coinObj.updateTimer = 0;
+      for (var i = 0; i < timeframes.length; i++) {
+        drawCurrentPriceSvgElement(coinObj.graphs[timeframes[i]].svg, coinObj.graphs[timeframes[i]].dataset, price);
       }
-
-      drawCurrentPriceSvgElement(coinObj.minuteSvg, coinObj.minuteDataset, price);
-      drawCurrentPriceSvgElement(coinObj.daySvg, coinObj.hourlyDatasetDay, price);
-      drawCurrentPriceSvgElement(coinObj.weekSvg, coinObj.hourlyDatasetWeek, price);
-      drawCurrentPriceSvgElement(coinObj.monthSvg, coinObj.dailyDatasetMonth, price);
-      drawCurrentPriceSvgElement(coinObj.quarterSvg, coinObj.dailyDatasetQuarter, price);
     });
   };
 
+  var updateAllPrices = function () {
+    for (var i = 0; i < compareList.length; i++) {
+      var coin = compareList[i];
+      compareListObj[coin].getNewPrice();
+    }
+  };
+
   var createCoin = function (symbol) {
-    compareList.push(symbol);
     compareListObj[symbol] = {
       firstRun: true,
-      lastColor: 'green',
       dayOpenPrice: 0,
       updateTimer: 0,
-      minuteDataset: [],
-      hourlyDatasetDay: [],
-      hourlyDatasetWeek: [],
-      dailyDatasetMonth: [],
-      dailyDatasetQuarter: [],
-      minuteSvg: document.querySelector('.' + symbol + '-minute-svg'),
-      daySvg: document.querySelector('.' + symbol + '-day-svg'),
-      weekSvg: document.querySelector('.' + symbol + '-week-svg'),
-      monthSvg: document.querySelector('.' + symbol + '-month-svg'),
-      quarterSvg: document.querySelector('.' + symbol + '-quarter-svg'),
+      graphs: {
+        hour: {
+          dataset: [],
+          svg: document.querySelector('.' + symbol + '-minute-svg')
+        },
+        day: {
+          dataset: [],
+          svg: document.querySelector('.' + symbol + '-day-svg')
+        },
+        week: {
+          dataset: [],
+          svg: document.querySelector('.' + symbol + '-week-svg')
+        },
+        month: {
+          dataset: [],
+          svg: document.querySelector('.' + symbol + '-month-svg')
+        },
+        quarter: {
+          dataset: [],
+          svg: document.querySelector('.' + symbol + '-quarter-svg')
+        }
+      },
       priceHolder: document.querySelector('.' + symbol + '-price'),
       getNewPrice: function () { updatePrice(symbol); }
     };
   };
 
-  createCoin('LTC');
-  createCoin('BTC');
-  createCoin('NEO');
+  var createAllCoins = function () {
+    for (var i = 0; i < compareList.length; i++) {
+      createCoin(compareList[i]);
+    }
+  };
 
-  initGraphs('LTC');
-  updatePrice('LTC');
-  setInterval(compareListObj['LTC'].getNewPrice, updateFrequency);
+  compareList.push('LTC');
+  compareList.push('BTC');
+  compareList.push('NEO');
 
-  initGraphs('BTC');
-  updatePrice('BTC');
-  setInterval(compareListObj['BTC'].getNewPrice, updateFrequency);
-
-  initGraphs('NEO');
-  updatePrice('NEO');
-  setInterval(compareListObj['NEO'].getNewPrice, updateFrequency);
+  createAllCoins();
+  initAllGraphs();
+  setTimeout(updateAllPrices, 100);
+  setInterval(updateAllPrices, updateFrequency);
 })();
