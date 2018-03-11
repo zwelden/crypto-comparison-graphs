@@ -1,6 +1,11 @@
 /* global axios */
+/**
+ * TODO: add parameter comments to code
+ */
 (function (app) {
   window.app.cryptoCompareGraph = (function () {
+    var debug = false; // set to true for async error console logs
+
     var updateFrequency = 15000; // milliseconds
 
     var timeframes = ['hour', 'day', 'week', 'month', 'quarter'];
@@ -56,7 +61,9 @@
           callback();
         })
         .catch(function (e) {
-          console.log(e);
+          if (debug) {
+            console.log(e);
+          }
         });
     };
 
@@ -69,7 +76,9 @@
           callback(price, coinSymbol);
         })
         .catch(function (e) {
-          console.log(e);
+          if (debug) {
+            console.log(e);
+          }
         });
     };
 
@@ -235,7 +244,9 @@
     };
 
     var addCoin = function (symbol) {
-      compareList.push(symbol);
+      if (compareList.indexOf(symbol) < 0) {
+        compareList.push(symbol);
+      }
     };
 
     var createAllCoins = function () {
