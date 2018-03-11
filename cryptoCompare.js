@@ -54,7 +54,12 @@
       var apiPath = api.begining + coinSymbol + api.ending;
       axios.get(apiPath)
         .then(function (response) {
-          var price = response.data[coinSymbol].USD;
+          var price;
+          if (response.data[coinSymbol].USD > 0) {
+            price = response.data[coinSymbol].USD;
+          } else {
+            price = response.data[coinSymbol].USD.PRICE;
+          }
 
           callback(price, coinSymbol);
         })
@@ -68,20 +73,20 @@
     var initGraphs = function (coinSymbol) {
       var coinObj = compareListObj[coinSymbol];
       loadData(api.minuteHistorical, coinSymbol, coinObj.graphs.hour.dataset, function () {
-        drawGraph(coinSymbol, coinObj.graphs.hour.svg, coinObj.graphs.hour.dataset, 60);
+        drawGraph(coinObj.graphs.hour.svg, coinObj.graphs.hour.dataset, 60);
       });
 
       loadData(api.hourHistorical, coinSymbol, coinObj.graphs.week.dataset, function () {
         coinObj.graphs.day.dataset = coinObj.graphs.week.dataset.slice(144);
         coinObj.dayOpenPrice = coinObj.graphs.day.dataset[0];
-        drawGraph(coinSymbol, coinObj.graphs.day.svg, coinObj.graphs.day.dataset, 24);
-        drawGraph(coinSymbol, coinObj.graphs.week.svg, coinObj.graphs.week.dataset, 168);
+        drawGraph(coinObj.graphs.day.svg, coinObj.graphs.day.dataset, 24);
+        drawGraph(coinObj.graphs.week.svg, coinObj.graphs.week.dataset, 168);
       });
 
       loadData(api.dayHistorical, coinSymbol, coinObj.graphs.quarter.dataset, function () {
         coinObj.graphs.month.dataset = coinObj.graphs.quarter.dataset.slice(60);
-        drawGraph(coinSymbol, coinObj.graphs.month.svg, coinObj.graphs.month.dataset, 30);
-        drawGraph(coinSymbol, coinObj.graphs.quarter.svg, coinObj.graphs.quarter.dataset, 90);
+        drawGraph(coinObj.graphs.month.svg, coinObj.graphs.month.dataset, 30);
+        drawGraph(coinObj.graphs.quarter.svg, coinObj.graphs.quarter.dataset, 90);
       });
     };
 
@@ -100,7 +105,7 @@
       }
     };
 
-    var drawGraph = function (coinSymbol, svg, dataset, maxPeriods) {
+    var drawGraph = function (svg, dataset, maxPeriods) {
       var graphContainer = svg.querySelector('.graph');
 
       var periodCounter = 0;
@@ -162,7 +167,7 @@
       if (coinObj.updateTimer === 60 / (updateFrequency / 1000)) { // one minute divided by update frequency in seconds
         coinObj.graphs.hour.dataset.shift();
         coinObj.graphs.hour.dataset.push(price);
-        drawGraph(coinSymbol, coinObj.graphs.hour.svg, coinObj.graphs.hour.dataset, 60);
+        drawGraph(coinObj.graphs.hour.svg, coinObj.graphs.hour.dataset, 60);
         coinObj.updateTimer = 0;
       }
     };
@@ -193,6 +198,7 @@
     };
 
     var createCoin = function (symbol) {
+      var symbolCleaned = symbol.split('*').join('');
       compareListObj[symbol] = {
         firstRun: true,
         dayOpenPrice: 0,
@@ -200,26 +206,26 @@
         graphs: {
           hour: {
             dataset: [],
-            svg: document.querySelector('.' + symbol + '-hour-svg')
+            svg: document.querySelector('.hour-svg' + '[data-name=' + symbolCleaned + ']')
           },
           day: {
             dataset: [],
-            svg: document.querySelector('.' + symbol + '-day-svg')
+            svg: document.querySelector('.day-svg' + '[data-name=' + symbolCleaned + ']')
           },
           week: {
             dataset: [],
-            svg: document.querySelector('.' + symbol + '-week-svg')
+            svg: document.querySelector('.week-svg' + '[data-name=' + symbolCleaned + ']')
           },
           month: {
             dataset: [],
-            svg: document.querySelector('.' + symbol + '-month-svg')
+            svg: document.querySelector('.month-svg' + '[data-name=' + symbolCleaned + ']')
           },
           quarter: {
             dataset: [],
-            svg: document.querySelector('.' + symbol + '-quarter-svg')
+            svg: document.querySelector('.quarter-svg' + '[data-name=' + symbolCleaned + ']')
           }
         },
-        priceHolder: document.querySelector('.' + symbol + '-price'),
+        priceHolder: document.querySelector('.latest-price' + '[data-name=' + symbolCleaned + ']'),
         getNewPrice: function () {
           updatePrice(symbol);
         }
@@ -246,6 +252,8 @@
 
     var deactivateCoinComparisons = function () {
       clearInterval(updateCoinInterval);
+      compareList.length = 0;
+      compareListObj.length = 0;
     };
 
     return {

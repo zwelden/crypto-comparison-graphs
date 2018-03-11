@@ -4,11 +4,11 @@
 
   graphHolder.constructCoinGraphMarkup('LTC', 'Litecoin');
   graphHolder.constructCoinGraphMarkup('BTC', 'Bitcoin');
-  graphHolder.constructCoinGraphMarkup('IOTA', 'IOTA');
+  graphHolder.constructCoinGraphMarkup('ETH', 'Ethereum');
 
   coinGraph.addCoin('LTC');
   coinGraph.addCoin('BTC');
-  coinGraph.addCoin('IOTA');
+  coinGraph.addCoin('ETH');
 
   coinGraph.initCoinComparisons();
 

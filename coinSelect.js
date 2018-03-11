@@ -39,9 +39,11 @@
   };
 
   var sortCoinList = function (a, b) {
-    if (a.name < b.name) {
+    var aName = a.name.trim().toLowerCase();
+    var bName = b.name.trim().toLowerCase();
+    if (aName < bName) {
       return -1;
-    } else if (a.name > b.name) {
+    } else if (aName > bName) {
       return 1;
     } else {
       return 0;

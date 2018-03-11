@@ -12,12 +12,13 @@
       },
       currentPriceContainer: { // needs SYM
         className: 'current-price',
-        open: 'Latest Price:<br><span class="latest-price ',
-        close: '-price"></span>'
+        open: 'Latest Price:<br><span class="latest-price" data-name="',
+        close: '"></span>'
       },
       svg: { // needs SYM-time
         open: '<svg class="',
-        close: '-svg" width="304" height="104" viewBox="0 0 304 104">' +
+        data: '-svg" data-name="',
+        close: '" width="304" height="104" viewBox="0 0 304 104">' +
           '<g class="graph"></g>' +
           '<g class="current-price"></g>' +
           '</svg>'
@@ -72,7 +73,7 @@
     var constructSvgGraphSvg = function (symbol, timeframeClass) {
       var svgContainer = document.createElement('div');
       svgContainer.classList.add(markupSections.svgContainerClass);
-      svgContainer.innerHTML = markupSections.svg.open + symbol + '-' + timeframeClass + markupSections.svg.close;
+      svgContainer.innerHTML = markupSections.svg.open + timeframeClass + markupSections.svg.data + symbol + markupSections.svg.close;
       return svgContainer;
     };
 
@@ -85,14 +86,15 @@
     var constructCoinGraphWrapper = function (symbol) {
       var graphWrapper = document.createElement('div');
       graphWrapper.classList.add(markupSections.sectionWrapperClass);
-      graphWrapper.classList.add(markupSections.sectionWrapperClass + '-' + symbol);
+      graphWrapper.dataset.name = symbol;
       return graphWrapper;
     };
 
     var constructCoinGraphMarkup = function (coinSymbol, coinTitle) {
-      var graphWrapper = constructCoinGraphWrapper(coinSymbol);
+      var coinSymbolCleaned = coinSymbol.split('*').join('');
+      var graphWrapper = constructCoinGraphWrapper(coinSymbolCleaned);
       var coinDataTitle = constructCoinDataTitle(coinTitle);
-      var currentPrice = constructCurrentPriceSection(coinSymbol);
+      var currentPrice = constructCurrentPriceSection(coinSymbolCleaned);
       graphWrapper.appendChild(coinDataTitle);
       graphWrapper.appendChild(currentPrice);
 
@@ -101,7 +103,7 @@
         var timeframeClass = timeSections[i].classInsert;
         var svgGraphSection = constructSvgGraphSectionWrapper(timeframeClass);
         var svgGraphTitle = constructSvgGraphTitle(timeframeTitle);
-        var svgGraphSvg = constructSvgGraphSvg(coinSymbol, timeframeClass);
+        var svgGraphSvg = constructSvgGraphSvg(coinSymbolCleaned, timeframeClass);
         svgGraphSection.appendChild(svgGraphTitle);
         svgGraphSection.appendChild(svgGraphSvg);
         graphWrapper.appendChild(svgGraphSection);
@@ -110,7 +112,7 @@
     };
 
     var removeCoinGraphMarkup = function (coinSymbol) {
-      var targetElement = document.querySelector('.' + markupSections.sectionWrapperClass + '-' + coinSymbol);
+      var targetElement = document.querySelector('.' + markupSections.sectionWrapperClass + '[data-name=' + coinSymbol + ']');
       targetElement.remove();
     };
 
