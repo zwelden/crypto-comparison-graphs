@@ -1,15 +1,11 @@
 /* global axios */
-/*
- * TODO:
- * - refactor compareList and compareListObj instatinatons
- * - make current price updates on single api call ?
- */
 (function () {
   var updateFrequency = 15000; // milliseconds
 
   var timeframes = ['hour', 'day', 'week', 'month', 'quarter'];
   var compareList = [];
   var compareListObj = [];
+  var updateCoinInterval;
 
   var api = {
     minuteHistorical: {
@@ -85,21 +81,22 @@
     loadData(api.hourHistorical, coinSymbol, coinObj.graphs.week.dataset, function () {
       coinObj.graphs.day.dataset = coinObj.graphs.week.dataset.slice(144);
       coinObj.dayOpenPrice = coinObj.graphs.day.dataset[0];
-      drawGraph(coinSymbol, coinObj.graphs.day.svg, coinObj.graphs.day.dataset, 24, false);
+      drawGraph(coinSymbol, coinObj.graphs.day.svg, coinObj.graphs.day.dataset, 24);
       drawGraph(coinSymbol, coinObj.graphs.week.svg, coinObj.graphs.week.dataset, 168);
     });
 
     loadData(api.dayHistorical, coinSymbol, coinObj.graphs.quarter.dataset, function () {
       coinObj.graphs.month.dataset = coinObj.graphs.quarter.dataset.slice(60);
-      drawGraph(coinSymbol, coinObj.graphs.month.svg, coinObj.graphs.month.dataset, 30, false);
+      drawGraph(coinSymbol, coinObj.graphs.month.svg, coinObj.graphs.month.dataset, 30);
       drawGraph(coinSymbol, coinObj.graphs.quarter.svg, coinObj.graphs.quarter.dataset, 90);
     });
   };
 
-  var initAllGraphs = function () {
+  var initAllGraphs = function (callback) {
     for (var i = 0; i < compareList.length; i++) {
       initGraphs(compareList[i]);
     }
+    callback();
   };
 
   var setStyleColor = function (pastPrice, currentPrice) {
@@ -159,21 +156,32 @@
     latestPriceContainer.innerHTML = svgLatestPriceObj;
   };
 
+  var setCoinPrice = function (coinObj, price) {
+    coinObj.priceHolder.innerText = price;
+  };
+
+  var setCoinPriceColor = function (coinObj, price) {
+    coinObj.priceHolder.style.color = setStyleColor(coinObj.dayOpenPrice, price);
+  };
+
+  var updateGraph = function (coinSymbol, coinObj, price) {
+    coinObj.updateTimer++;
+    if (coinObj.updateTimer === 60 / (updateFrequency / 1000)) { // one minute divided by update frequency in seconds
+      coinObj.graphs.hour.dataset.shift();
+      coinObj.graphs.hour.dataset.push(price);
+      drawGraph(coinSymbol, coinObj.graphs.hour.svg, coinObj.graphs.hour.dataset, 60);
+      coinObj.updateTimer = 0;
+    }
+  };
+
   var updatePrice = function (coinSymbol) {
     getLatestPrice(api.current, coinSymbol, function (price, coinSymbol) {
       var coinObj = compareListObj[coinSymbol];
-      coinObj.priceHolder.innerText = price;
-
-      coinObj.priceHolder.style.color = setStyleColor(coinObj.dayOpenPrice, price);
+      setCoinPrice(coinObj, price);
+      setCoinPriceColor(coinObj, price);
 
       if (!coinObj.firstRun) {
-        coinObj.updateTimer++;
-        if (coinObj.updateTimer === 60 / (updateFrequency / 1000)) { // one minute divided by update frequency in seconds
-          coinObj.graphs.hour.dataset.shift();
-          coinObj.graphs.hour.dataset.push(price);
-          drawGraph(coinSymbol, coinObj.graphs.hour.svg, coinObj.graphs.hour.dataset, 60);
-          coinObj.updateTimer = 0;
-        }
+        updateGraph(coinSymbol, coinObj, price);
       } else {
         coinObj.firstRun = false;
       }
@@ -199,7 +207,7 @@
       graphs: {
         hour: {
           dataset: [],
-          svg: document.querySelector('.' + symbol + '-minute-svg')
+          svg: document.querySelector('.' + symbol + '-hour-svg')
         },
         day: {
           dataset: [],
@@ -219,7 +227,9 @@
         }
       },
       priceHolder: document.querySelector('.' + symbol + '-price'),
-      getNewPrice: function () { updatePrice(symbol); }
+      getNewPrice: function () {
+        updatePrice(symbol);
+      }
     };
   };
 
@@ -229,12 +239,19 @@
     }
   };
 
+  var initCoinComparisons = function () {
+    createAllCoins();
+    initAllGraphs(updateAllPrices);
+    updateCoinInterval = setInterval(updateAllPrices, updateFrequency);
+  };
+
+  var deactivateCoinComparisons = function () {
+    clearInterval(updateCoinInterval);
+  };
+
   compareList.push('LTC');
   compareList.push('BTC');
   compareList.push('NEO');
 
-  createAllCoins();
-  initAllGraphs();
-  setTimeout(updateAllPrices, 100);
-  setInterval(updateAllPrices, updateFrequency);
+  initCoinComparisons();
 })();
