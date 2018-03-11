@@ -10,4 +10,5 @@
   coinGraph.addCoin('NEO');
 
   coinGraph.initCoinComparisons();
+
 })(window.app = window.app || {});

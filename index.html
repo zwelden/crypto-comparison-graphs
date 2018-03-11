@@ -52,12 +52,35 @@
   <body>
     <h1>Crypto Live Compare Graph</h1>
 
+    <div class="crypto-selector-wrapper">
+      <div class="selector-title">
+        Select Cryptos To Compare
+      </div>
+      <div class="selection-group">
+        <label for="crypto-1">Crypto 1</label>
+        <select class="crypto-select" name="crypto-1"></select>
+      </div>
+      <div class="selection-group">
+        <label for="crypto-2">Crypto 2</label>
+        <select class="crypto-select" name="crypto-2"></select>
+      </div>
+      <div class="selection-group">
+        <label for="crypto-2">Crypto 3</label>
+        <select class="crypto-select" name="crypto-2"></select>
+      </div>
+    </div>
+    <div class="crypto-restart-wrapper">
+      <button type="button" name="button">Start New Comparison</button>
+    </div>
+
     <div class="coin-content-wrapper">
 
     </div>
 
   </body>
+  <script type="text/javascript" src="apiManager.js"></script>
+  <script type="text/javascript" src="coinSelect.js"></script>
   <script type="text/javascript" src="coinGraphHolder.js"></script>
   <script type="text/javascript" src="cryptoCompare.js"></script>
   <script type="text/javascript" src="app.js"></script>
-</html>gi
+</html>

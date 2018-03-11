@@ -13,24 +13,7 @@
     var compareListObj = [];
     var updateCoinInterval;
 
-    var api = {
-      minuteHistorical: {
-        begining: 'https://min-api.cryptocompare.com/data/histominute?fsym=',
-        ending: '&tsym=USD&limit=60&extraParams=ltc_live_price'
-      },
-      hourHistorical: {
-        begining: 'https://min-api.cryptocompare.com/data/histohour?fsym=',
-        ending: '&tsym=USD&limit=168&extraParams=ltc_live_price'
-      },
-      dayHistorical: {
-        begining: 'https://min-api.cryptocompare.com/data/histoday?fsym=',
-        ending: '&tsym=USD&limit=90&extraParams=ltc_live_price'
-      },
-      current: {
-        begining: 'https://min-api.cryptocompare.com/data/pricemulti?fsyms=',
-        ending: '&tsyms=USD&extraParams=ltc_live_price'
-      }
-    };
+    var api = app.apiManager;
 
     var svgComponents = {
       graph: {
