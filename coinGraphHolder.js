@@ -1,5 +1,4 @@
 (function (app) {
-
   app.coinGraphHolder = (function () {
     var markupSections = {
       coinGraphsWrapperClass: 'coin-content-wrapper',
@@ -120,10 +119,4 @@
       removeCoinGraphMarkup: removeCoinGraphMarkup
     };
   })();
-})(window.app = window.app || {});
-
-(function (app) {
-  app.coinGraphHolder.constructCoinGraphMarkup('LTC', 'Litecoin');
-  app.coinGraphHolder.constructCoinGraphMarkup('BTC', 'Bitcoin');
-  app.coinGraphHolder.constructCoinGraphMarkup('NEO', 'Neo');
 })(window.app = window.app || {});

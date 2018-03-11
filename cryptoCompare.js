@@ -272,12 +272,3 @@
     };
   })();
 })(window.app = window.app || {});
-
-(function (app) {
-  var coinGraph = window.app.cryptoCompareGraph;
-  coinGraph.addCoin('LTC');
-  coinGraph.addCoin('BTC');
-  coinGraph.addCoin('NEO');
-
-  coinGraph.initCoinComparisons();
-})(window.app = window.app || {});
