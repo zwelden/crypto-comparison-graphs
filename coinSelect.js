@@ -6,7 +6,7 @@
   var selectElements = document.querySelectorAll('.crypto-select');
 
   var selectOptionsMarkup = {
-    firstOption: '<option selected disabled>Choose A Crypto</option>',
+    firstOption: '<option selected disabled value="0">Choose A Crypto</option>',
     openTag: '<option value="',
     openTagEnd: '">',
     closeTag: '</option>'
@@ -52,7 +52,7 @@
     for (var i = 0; i < selectElements.length; i++) {
       var selectEl = selectElements[i];
       var innerhtml = '';
-      innerhtml += selectOptionsMarkup.firstOptions;
+      innerhtml += selectOptionsMarkup.firstOption;
 
       for (var j = 0; j < coinListOptions.length; j++) {
         var coin = coinListOptions[j];

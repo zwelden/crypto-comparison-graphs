@@ -114,9 +114,15 @@
       targetElement.remove();
     };
 
+    var removeAllGraphs = function () {
+      var wrapperElement = document.querySelector('.' + markupSections.coinGraphsWrapperClass);
+      wrapperElement.innerHTML = '';
+    };
+
     return {
       constructCoinGraphMarkup: constructCoinGraphMarkup,
-      removeCoinGraphMarkup: removeCoinGraphMarkup
+      removeCoinGraphMarkup: removeCoinGraphMarkup,
+      removeAllGraphs: removeAllGraphs
     };
   })();
 })(window.app = window.app || {});
