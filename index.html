@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Litecoin Live Graph Test</title>
+    <title>Crypto Live Compare Graph</title>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   </head>
   <style media="screen">
@@ -43,155 +43,13 @@
     }
   </style>
   <body>
-    <h1>Crypto Live Graph</h1>
+    <h1>Crypto Live Compare Graph</h1>
 
-    <div class="coin-data-wrapper">
-
-      <h2>LTC</h2>
-      <div class="current-price">
-        Latest Price:<br><span class="latest-price LTC-price"></span>
-      </div>
-
-      <h3>Past Hour</h3>
-      <div class="svg-container">
-        <svg class="LTC-hour-svg" width="304" height="104" viewBox="0 0 304 104">
-          <g class="graph"></g>
-          <g class="current-price"></g>
-        </svg>
-      </div>
-
-      <h3>Past 24 Hours</h3>
-      <div class="svg-container">
-        <svg class="LTC-day-svg" width="304" height="104" viewBox="0 0 304 104">
-          <g class="graph"></g>
-          <g class="current-price"></g>
-        </svg>
-      </div>
-
-      <h3>Past 7 Days</h3>
-      <div class="svg-container">
-        <svg class="LTC-week-svg" width="304" height="104" viewBox="0 0 304 104">
-          <g class="graph"></g>
-          <g class="current-price"></g>
-        </svg>
-      </div>
-
-      <h3>Past 30 Days</h3>
-      <div class="svg-container">
-        <svg class="LTC-month-svg" width="304" height="104" viewBox="0 0 304 104">
-          <g class="graph"></g>
-          <g class="current-price"></g>
-        </svg>
-      </div>
-
-      <h3>Past 90 Days</h3>
-      <div class="svg-container">
-        <svg class="LTC-quarter-svg" width="304" height="104" viewBox="0 0 304 104">
-          <g class="graph"></g>
-          <g class="current-price"></g>
-        </svg>
-      </div>
-
-    </div>
-
-    <div class="coin-data-wrapper">
-
-      <h2>BTC</h2>
-      <div class="current-price">
-        Latest Price:<br><span class="latest-price BTC-price"></span>
-      </div>
-
-      <h3>Past Hour</h3>
-      <div class="svg-container">
-        <svg class="BTC-hour-svg" width="304" height="104" viewBox="0 0 304 104">
-          <g class="graph"></g>
-          <g class="current-price"></g>
-        </svg>
-      </div>
-
-      <h3>Past 24 Hours</h3>
-      <div class="svg-container">
-        <svg class="BTC-day-svg" width="304" height="104" viewBox="0 0 304 104">
-          <g class="graph"></g>
-          <g class="current-price"></g>
-        </svg>
-      </div>
-
-      <h3>Past 7 Days</h3>
-      <div class="svg-container">
-        <svg class="BTC-week-svg" width="304" height="104" viewBox="0 0 304 104">
-          <g class="graph"></g>
-          <g class="current-price"></g>
-        </svg>
-      </div>
-
-      <h3>Past 30 Days</h3>
-      <div class="svg-container">
-        <svg class="BTC-month-svg" width="304" height="104" viewBox="0 0 304 104">
-          <g class="graph"></g>
-          <g class="current-price"></g>
-        </svg>
-      </div>
-
-      <h3>Past 90 Days</h3>
-      <div class="svg-container">
-        <svg class="BTC-quarter-svg" width="304" height="104" viewBox="0 0 304 104">
-          <g class="graph"></g>
-          <g class="current-price"></g>
-        </svg>
-      </div>
-
-    </div>
-
-    <div class="coin-data-wrapper">
-
-      <h2>NEO</h2>
-      <div class="current-price">
-        Latest Price:<br><span class="latest-price NEO-price"></span>
-      </div>
-
-      <h3>Past Hour</h3>
-      <div class="svg-container">
-        <svg class="NEO-hour-svg" width="304" height="104" viewBox="0 0 304 104">
-          <g class="graph"></g>
-          <g class="current-price"></g>
-        </svg>
-      </div>
-
-      <h3>Past 24 Hours</h3>
-      <div class="svg-container">
-        <svg class="NEO-day-svg" width="304" height="104" viewBox="0 0 304 104">
-          <g class="graph"></g>
-          <g class="current-price"></g>
-        </svg>
-      </div>
-
-      <h3>Past 7 Days</h3>
-      <div class="svg-container">
-        <svg class="NEO-week-svg" width="304" height="104" viewBox="0 0 304 104">
-          <g class="graph"></g>
-          <g class="current-price"></g>
-        </svg>
-      </div>
-
-      <h3>Past 30 Days</h3>
-      <div class="svg-container">
-        <svg class="NEO-month-svg" width="304" height="104" viewBox="0 0 304 104">
-          <g class="graph"></g>
-          <g class="current-price"></g>
-        </svg>
-      </div>
-
-      <h3>Past 90 Days</h3>
-      <div class="svg-container">
-        <svg class="NEO-quarter-svg" width="304" height="104" viewBox="0 0 304 104">
-          <g class="graph"></g>
-          <g class="current-price"></g>
-        </svg>
-      </div>
+    <div class="coin-content-wrapper">
 
     </div>
 
   </body>
-  <script type="text/javascript" src="main.js"></script>
+  <script type="text/javascript" src="coinGraphHolder.js"></script>
+  <script type="text/javascript" src="cryptoCompare.js"></script>
 </html>
