@@ -3,7 +3,7 @@
  * TODO: add parameter comments to code
  */
 (function (app) {
-  window.app.cryptoCompareGraph = (function () {
+  app.cryptoCompareGraph = (function () {
     var debug = false; // set to true for async error console logs
 
     var updateFrequency = 15000; // milliseconds
