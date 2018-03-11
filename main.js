@@ -30,6 +30,23 @@
     }
   };
 
+  var svgComponents = {
+    graph: {
+      pathOpen: '<path ',
+      pathStroke: 'style="stroke:',
+      pathStart: ';" d="M',
+      pathClose: '" class="price-hist-path"></path>'
+    },
+    upTriangle: '<polygon points="301,0 298,5 304,5" style="fill:green;" />',
+    downTriangle: '<polygon points="301,104 298,99 304,99" style="fill:red;" />',
+    circle: {
+      circleOpen: '<circle cx="302" cy="',
+      circleRadius: '" r="2" ',
+      circleFill: 'fill="',
+      circleClose: '" />'
+    }
+  };
+
   var loadData = function (api, coinSymbol, targetDataset, callback) {
     var apiPath = api.begining + coinSymbol + api.ending;
     axios.get(apiPath)
@@ -95,10 +112,6 @@
 
   var drawGraph = function (coinSymbol, svg, dataset, maxPeriods) {
     var graphContainer = svg.querySelector('.graph');
-    var pathOpen = '<path ';
-    var pathStroke = 'style="stroke:';
-    var pathStart = ';" d="M';
-    var pathClose = '" class="price-hist-path"></path>';
 
     var periodCounter = 0;
     var periods = dataset.length >= maxPeriods + 1 ? maxPeriods + 1 : dataset.length;
@@ -120,20 +133,13 @@
       periodCounter += 1;
     }
 
-    graphContainer.innerHTML = pathOpen + pathStroke + pathStrokeColor + pathStart + pathCode + pathClose;
+    graphContainer.innerHTML = svgComponents.graph.pathOpen + svgComponents.graph.pathStroke + pathStrokeColor + svgComponents.graph.pathStart + pathCode + svgComponents.graph.pathClose;
   };
 
   var drawCurrentPriceSvgElement = function (svg, dataset, currentPrice) {
     var latestPriceContainer = svg.querySelector('.current-price');
     var svgLatestPriceObj;
 
-    var upTriangle = '<polygon points="301,0 298,5 304,5" style="fill:green;" />';
-    var downTriangle = '<polygon points="301,104 298,99 304,99" style="fill:red;" />';
-    var circleOpen = '<circle cx="302" ';
-    var circleY = 'cy="';
-    var circleRadius = '" r="2" ';
-    var circleFill = 'fill="';
-    var circleClose = '" />';
     var dataStartPrice = dataset[0];
     var fillColor = setStyleColor(dataStartPrice, currentPrice);
 
@@ -142,12 +148,12 @@
     var dataSpread = dataMax - dataMin;
 
     if (currentPrice > dataMax) {
-      svgLatestPriceObj = upTriangle;
+      svgLatestPriceObj = svgComponents.upTriangle;
     } else if (currentPrice < dataMin) {
-      svgLatestPriceObj = downTriangle;
+      svgLatestPriceObj = svgComponents.downTriangle;
     } else {
       var yPos = 102 - ((currentPrice - dataMin) / dataSpread * 100);
-      svgLatestPriceObj = circleOpen + circleY + yPos + circleRadius + circleFill + fillColor + circleClose;
+      svgLatestPriceObj = svgComponents.circle.circleOpen + yPos + svgComponents.circle.circleRadius + svgComponents.circle.circleFill + fillColor + svgComponents.circle.circleClose;
     }
 
     latestPriceContainer.innerHTML = svgLatestPriceObj;
