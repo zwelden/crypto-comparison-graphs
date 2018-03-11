@@ -12,4 +12,5 @@ Generates graphs for past hour, day, week, month, and quarter, and updates the l
 - [ ] Add selection options
 - [ ] make responsive for mobile
 - [ ] add popup view graph (perhaps with more info/lines/datapoints/etc)
-- [ ] add high/low/%change info 
+- [ ] add high/low/%change info
+- [ ] make sure initial price loads only after all graphs finish loading (maybe pubsub it?)
