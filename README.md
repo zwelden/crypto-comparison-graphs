@@ -9,10 +9,12 @@ Generates graphs for past hour, day, week, month, and quarter, and updates the l
 ## TODO
 - [ ] Add webpack/gulp
 - [ ] Separate styles into sass files
-- [ ] Add selection options
+- [X] Add selection options
 - [ ] make responsive for mobile
 - [ ] add popup view graph (perhaps with more info/lines/datapoints/etc)
 - [ ] add high/low/%change info
 - [ ] make sure initial price loads only after all graphs finish loading (maybe pubsub it?)
-- [ ] add image next to coin name 
+- [ ] add image next to coin name
 - [ ] add price movement indicator next to current price
+- [ ] ensure capability to select less than 3 coins
+- [ ] create graph overlay functionality (i.e. multiple graphs in one)
