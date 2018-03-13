@@ -16,5 +16,6 @@ Generates graphs for past hour, day, week, month, and quarter, and updates the l
 - [ ] make sure initial price loads only after all graphs finish loading (maybe pubsub it?)
 - [ ] add image next to coin name
 - [ ] add price movement indicator next to current price
-- [ ] ensure capability to select less than 3 coins
+- [X] ensure capability to select less than 3 coins
 - [ ] create graph overlay functionality (i.e. multiple graphs in one)
+- [ ] create SVG message for coins that are missing time series data
