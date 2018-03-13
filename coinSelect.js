@@ -6,7 +6,7 @@
   var selectElements = document.querySelectorAll('.crypto-select');
 
   var selectOptionsMarkup = {
-    firstOption: '<option selected disabled value="0">Choose A Crypto</option>',
+    firstOption: '<option selected value="0">Choose A Crypto</option>',
     openTag: '<option value="',
     openTagEnd: '">',
     closeTag: '</option>'

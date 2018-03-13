@@ -16,6 +16,9 @@
   var coinSelectors = document.querySelectorAll('.crypto-select');
 
   graphActivator.addEventListener('click', function () {
+    if (coinSelectors[0].value === '0' && coinSelectors[1].value === '0' && coinSelectors[1].value === '0') {
+      return;
+    }
     coinGraph.deactivateCoinComparisons();
     graphHolder.removeAllGraphs();
 

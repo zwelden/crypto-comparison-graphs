@@ -91,6 +91,9 @@
     };
 
     var constructCoinGraphMarkup = function (coinSymbol, coinTitle) {
+      if (coinSymbol === '0') {
+        return;
+      }
       var coinNumSafe = isNaN(parseInt(coinSymbol[0])) ? coinSymbol : 'd' + coinSymbol;
       var coinSymbolCleaned = coinNumSafe.split('*').join('');
       var graphWrapper = constructCoinGraphWrapper(coinSymbolCleaned);
