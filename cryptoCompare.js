@@ -198,7 +198,8 @@
     };
 
     var createCoin = function (symbol) {
-      var symbolCleaned = symbol.split('*').join('');
+      var coinNumSafe = isNaN(parseInt(symbol[0])) ? symbol : 'd' + symbol;
+      var symbolCleaned = coinNumSafe.split('*').join('');
       compareListObj[symbol] = {
         firstRun: true,
         dayOpenPrice: 0,

@@ -91,7 +91,8 @@
     };
 
     var constructCoinGraphMarkup = function (coinSymbol, coinTitle) {
-      var coinSymbolCleaned = coinSymbol.split('*').join('');
+      var coinNumSafe = isNaN(parseInt(coinSymbol[0])) ? coinSymbol : 'd' + coinSymbol;
+      var coinSymbolCleaned = coinNumSafe.split('*').join('');
       var graphWrapper = constructCoinGraphWrapper(coinSymbolCleaned);
       var coinDataTitle = constructCoinDataTitle(coinTitle);
       var currentPrice = constructCurrentPriceSection(coinSymbolCleaned);
